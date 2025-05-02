@@ -26,7 +26,7 @@ coverage
 # nyc test coverage
 .nyc_output
 
-# Grunt intermediate storage (https://gruntjs.com/creating-plugins#storing-task-files)
+# Grunt intermediate storage (https://gruntjs.com/creating-plugins#storing-intermediate-files)
 .grunt
 
 # Bower dependency directory (https://bower.io/)
@@ -72,7 +72,7 @@ web_modules/
 # Yarn Integrity file
 .yarn-integrity
 
-# dotenv environment variable files
+# dotenv environment variables file
 .env
 .env.development.local
 .env.test.local
@@ -100,10 +100,6 @@ dist
 # vuepress build output
 .vuepress/dist
 
-# vuepress v2.x temp and cache directory
-.temp
-.cache
-
 # Docusaurus cache and generated files
 .docusaurus
 
@@ -128,3 +124,12 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# macOS
+.DS_Store
+
+# VS Code
+.vscode/
+
+# Lock file (optional - remove if you want to track it)
+package-lock.json 
