@@ -131,7 +131,8 @@ serve(async (req) => {
                         // Extract location if available
                         const latitude = venueData?.location?.latitude;
                         const longitude = venueData?.location?.longitude;
-                        
+                        // Log coordinates for debugging
+                        console.log(`Discovered venue: ${venueName} (RA ID: ${venueRaId}) - Latitude: ${latitude}, Longitude: ${longitude}`);
                         if (venueRaId && venueName && !discoveredRaVenues.has(venueRaId)) {
                             discoveredRaVenues.set(venueRaId, { 
                                 ra_id: venueRaId, 
@@ -169,6 +170,8 @@ serve(async (req) => {
 
             for (const newRaVenueStub of newRaVenues) {
                 console.log(`Processing new venue ${newRaVenueStub.name}: ${JSON.stringify(newRaVenueStub)}`);
+                // Log coordinates for debugging
+                console.log(`Processing coordinates for new venue: ${newRaVenueStub.name} (RA ID: ${newRaVenueStub.ra_id}) - Latitude: ${newRaVenueStub.latitude}, Longitude: ${newRaVenueStub.longitude}`);
                 
                 try {
                     // --- Step 1: Fetch additional details using fetchAndPrepareVenueDetails ---
