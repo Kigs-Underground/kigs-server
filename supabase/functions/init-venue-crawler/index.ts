@@ -124,6 +124,8 @@ serve(async (req) => {
                         }
                         
                         const venueData = event.venue;
+                        // Log all properties of the discovered venue
+                        console.log(`Full venue data for event ${event.title}:`, JSON.stringify(venueData, null, 2));
                         //console.log(`Venue data for event ${event.title}:`, JSON.stringify(venueData));
                         const venueRaId = venueData?.id;
                         const venueName = venueData?.name;
@@ -263,9 +265,9 @@ serve(async (req) => {
                     console.log(`Successfully INITIALIZED new venue: ${newRaVenueStub.name} (RA ID: ${newRaVenueStub.ra_id}) - Scheduled for crawl.`);
                     cityNewVenuesAdded++;
                     // Slack message uses fetched details where available (name still from stub for consistency? KIGS-134 uses stub name)
-                    const raLink = venueDetails.contentUrl ? `<${venueDetails.contentUrl}|RA Page>` : 'RA Page N/A';
-                    const igLink = venueDetails.instagram ? `<${venueDetails.instagram}|Instagram>` : 'Instagram N/A'; 
-                    newVenueSlackMessages.push(`- *${newRaVenueStub.name}* (${city.name}): ${raLink}, ${igLink}`); // Use stub name per KIGS-134 pages table req
+                    // Include all venue properties in the Slack message as a code block
+                    const venueDetailsJson = '```' + JSON.stringify(venueDetails) + '```';
+                    newVenueSlackMessages.push(`- *${newRaVenueStub.name}* (${city.name}):\n${venueDetailsJson}`); // Use stub name per KIGS-134 pages table req
                     
                 } catch (processError: any) {
                     console.error(`Unexpected error processing new venue RA ID ${newRaVenueStub.ra_id} (${newRaVenueStub.name}): ${processError.message}`);
