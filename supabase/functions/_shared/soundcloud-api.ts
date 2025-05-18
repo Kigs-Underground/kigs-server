@@ -20,7 +20,7 @@ type AccessTokenResponse = {
 let accessTokenPromise: Promise<string> | undefined;
 
 // Function to get or refresh the token if necessary
-async function getAccessToken(): Promise<string | null> {
+export async function getAccessToken(): Promise<string | null> {
     if (!SOUNDCLOUD_CLIENT_ID || !SOUNDCLOUD_CLIENT_SECRET) {
         console.error("Missing SoundCloud Client ID or Secret in environment variables.");
         return null;
@@ -172,5 +172,41 @@ export async function getSoundcloudTracks(userId: string): Promise<Mix[]> {
     } catch (error) {
         console.error(`Error fetching SoundCloud tracks for user ID ${userId}:`, error);
         return [];
+    }
+}
+
+export async function getTrackStreamURL(trackId: string): Promise<any> {
+    if (!trackId) {
+        throw new Error("trackId parameter is missing");
+    }
+
+    console.log("Getting track stream URLs for track ID: " + trackId);
+
+    const accessToken = await getAccessToken();
+    if (!accessToken) {
+        throw new Error("Failed to get SoundCloud Access Token. Cannot fetch stream URL.");
+    }
+
+    try {
+        const streamURLResponse = await fetch(
+            `${SOUNDCLOUD_API_URL}/tracks/${trackId}/streams`,
+            {
+                headers: {
+                    'Authorization': `OAuth ${accessToken}`,
+                },
+            }
+        );
+
+        if (!streamURLResponse.ok) {
+            const errorText = await streamURLResponse.text();
+            throw new Error(`Failed to fetch track stream URL: ${streamURLResponse.statusText} - ${errorText}`);
+        }
+
+        const tracksData = await streamURLResponse.json();
+        console.log("Fetched Track Stream URLs: " + JSON.stringify(tracksData));
+        return tracksData;
+    } catch (error) {
+        console.error(`Error fetching stream URL for track ID ${trackId}:`, error);
+        throw error; // Re-throw the error to be handled by the caller
     }
 } 
