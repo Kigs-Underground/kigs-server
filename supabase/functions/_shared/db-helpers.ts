@@ -43,10 +43,10 @@ export async function upsertScrapedData(
 
     // --- Upsert Venues (as Pages + Venue details) ---
     for (const v of data.venues) {
+        // Upsert into pages WITHOUT specifying id
         const { data: pageData, error: pageError } = await supabaseAdmin
             .from('pages')
             .upsert({
-                id: v.id, // Use pre-generated Kigs ID
                 ra_id: v.ra_id,
                 handle: v.handle,
                 name: v.name,
@@ -60,7 +60,7 @@ export async function upsertScrapedData(
             .single();
 
         if (pageError) {
-            console.error(`Error upserting page for venue ${v.name} (ID: ${v.id}, RA: ${v.raId}):`, pageError);
+            console.error(`Error upserting page for venue ${v.name} (RA: ${v.ra_id}):`, pageError);
             results.pages.errors++;
             continue;
         }
